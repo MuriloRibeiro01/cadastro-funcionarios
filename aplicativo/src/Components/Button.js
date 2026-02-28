@@ -1,5 +1,5 @@
-function Button() {
+export function Button(props) {
     return (
-        <button>botão</button>
+        <button>{props.texto}</button>
     );
 }
