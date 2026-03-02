@@ -11,17 +11,30 @@ export function FormFuncionario({ isOpen, onClose, children }) {
             </div>
             <form className="formulario-adicao-content">
                 <p>Adicione os dados do funcionário.</p> 
-                <input placeholder="CPF" type="text"></input>
-                <input placeholder="Nome" type="text"></input>
-                <input placeholder="E-Mail" type="text"></input>
-                <input placeholder="Cargo" type="text"></input>
-                <input placeholder="CEP" type="text"></input>
-                <div className="cep-data">
-                    <input placeholder="Rua"></input>
-                    <input placeholder="Bairro"></input>
-                    <input placeholder="Cidade"></input>
-                    <input placeholder="Estado"></input>
-                </div>
+                <section>
+                    <h3>Dados Pessoais</h3>
+                    <input className="input-form" placeholder="CPF" type="text"></input>
+                    <input className="input-form" placeholder="Nome" type="text"></input>
+                </section>
+                <section>
+                    <h3>Contato</h3>
+                    <input className="input-form" placeholder="E-Mail" type="text"></input>
+                    <input className="input-form" placeholder="Telefone" type="text"></input>
+                </section>
+                <section>
+                    <h3>Áreac Ocupante</h3>
+                    <input className="input-form" placeholder="Cargo" type="text"></input>
+                </section>
+                <section>
+                    <h3>Endereço</h3>
+                    <input className="input-form" placeholder="CEP" type="text"></input>
+                    <div className="cep-data">
+                        <input className="input-form" placeholder="Rua"></input>
+                        <input className="input-form" placeholder="Bairro"></input>
+                        <input className="input-form" placeholder="Cidade"></input>
+                        <input className="input-form" placeholder="Estado"></input>
+                    </div>
+                </section>     
                 
                 <Button texto="Salvar Conteúdo" />
             </form>
@@ -29,3 +42,9 @@ export function FormFuncionario({ isOpen, onClose, children }) {
         </div>
     );
 }
+
+// Campos a serem chamados pela API:
+// logradouro "rua"
+// bairro
+// localidade
+// estado
