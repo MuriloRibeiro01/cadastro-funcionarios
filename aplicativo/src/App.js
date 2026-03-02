@@ -1,9 +1,12 @@
 import './App.css';
 import { Button } from './Components/Button'
-import { FormularioFuncionario } from './Components/FormFuncionario';
+import { FormFuncionario } from './Components/FormFuncionario';
+import UserAction from './Components/UserAction';
+import { useState } from "react";
 
 function App() {
-  return (
+  const [isModalOpen, setModalIsOpen] = useState(false);
+  return (    
     <div className="App">
       <header className="App-header">
         <h1>EmploYEE</h1>
@@ -11,7 +14,14 @@ function App() {
 
       <main>
         <div>
-          <FormularioFuncionario />
+          <Button
+            texto="Adicionar Funcionario"
+            onClick={() => setModalIsOpen(true)}
+          />
+          <FormFuncionario 
+            isOpen={isModalOpen}
+            onClose={() => setModalIsOpen(false)}
+          />
         </div>
       </main>
 

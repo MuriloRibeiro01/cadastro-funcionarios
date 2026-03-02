@@ -1,5 +1,5 @@
 export function Button(props) {
     return (
-        <button>{props.texto}</button>
+        <button onClick={props.onClick}>{props.texto}</button>
     );
 }
