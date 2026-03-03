@@ -485,3 +485,18 @@ main {
 .btn-excluir-confirm:active {
     transform: scale(0.98);
 }
+
+.msg-nenhum-funcionario {
+    text-align: center;
+    color: #818BA0; /* Cinza/Azul nórdico suave para não gritar na tela */
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 60px 20px;
+    background-color: var(--card-bg);
+    border: 2px dashed #D8DEE9; /* Borda tracejada elegante */
+    border-radius: 12px;
+    max-width: 600px;
+    margin: 60px auto; /* Centraliza a caixa na tela */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03); /* Sombra quase imperceptível */
+    line-height: 1.6;
+}
