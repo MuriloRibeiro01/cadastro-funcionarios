@@ -3,6 +3,8 @@ import { Button } from "./Button";
 
 export function FormFuncionario({ isOpen, onClose, onSave, children, funcionarioParaEditar }) {    
 
+    // sincroniza o formulário com o funcionário selecionado para edição
+    // assim permite que o mesmo modal sirva para criar e editar
     useEffect(() => {
         if (isOpen) {
             if(funcionarioParaEditar) {
@@ -14,7 +16,6 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
         }
     }, [isOpen, funcionarioParaEditar]);
 
-    // recupera dados e aloca aos objetos
     const [funcionario, setFuncionario] = useState({
         cpf: "",
         nome: "",
@@ -28,10 +29,11 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
         uf: ""
     });
 
+    // chama objetos para loading e erros
     const [loading, setLoading] = useState(false)
     const [erros, setErros] = useState({});
 
-    // recupera os dados e aloca os novos
+    // aloca os novos dados no objeto setFuncionario
     const handleChange = (e) => {
         const { name, value } = e.target;
 
@@ -41,14 +43,17 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
         });
     };
 
+    // validações de cpf
     const validarCPF = async () => {
         const cpfLimpo = funcionario.cpf.replace(/[^\d]+/g, '');
 
+        // gerenciamento de erro
         const dispararErroCpf = () => {
             setErros(prev => ({ ...prev, cpf: "CPF Inválido." }));
             return false;
         };
 
+        // validação de tamanho e sequência
         if(cpfLimpo.length !== 11 ||
             cpfLimpo === "00000000000" || 
             cpfLimpo === "11111111111" || 
@@ -69,7 +74,6 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
 
         // calcula o primeiro dígito verificador
         for (let i = 1; i <= 9; i++ ) {
-            // CORREÇÃO: Adicionado o ", i" no substring
             soma += parseInt(cpfLimpo.substring(i - 1, i)) * (11 - i);
         }
         resto = (soma * 10) % 11;
@@ -85,6 +89,7 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
         if ((resto === 10) || (resto === 11)) resto = 0;
         if (resto !== parseInt(cpfLimpo.substring(10, 11))) return dispararErroCpf();
 
+        // aloca o objeto de erro e o retorna
         setErros(prev => {
             const novoErro = {...prev};
             delete novoErro.cpf;
@@ -94,11 +99,14 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
         return true;
     }
 
+    // validação de nome completo
     const validaNome = async () => {
         const nomeDigitado = funcionario.nome.trim();
         
+        // separa as palavras e aloca parte como diferente de vazio
         const partes = nomeDigitado.split(" ").filter(parte => parte !== "");
 
+        // tem que ter mais de uma palavra para passar
         if (partes.length < 2 || partes[1].length < 2) {
             setErros(prev => ({
                 ...prev,
@@ -107,6 +115,7 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
             return false;
         }
 
+        // gerenciamento de erro
         setErros(prev => ({
             ...prev,
             nome: ""
@@ -115,15 +124,19 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
         return true;
     }
 
+    // validação de email
     const validaEmail = async () => {
         
+        // valida caracteres
         const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+        // valida o formato do email
         if(!funcionario.email || !emailValido.test(funcionario.email)) {
             setErros(prev => ({ ...prev, email: "Formato de e-mail inválido." }));
             return false;
         }
 
+        // gerenciamento de erro
         setErros(prev => {
             const novoErro = {...prev};
             delete novoErro.email;
@@ -135,22 +148,27 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
     // recupera os dados da api e aloca nos inputs, validando erros
     const handleCepBlur = async () => {
 
+        // formato do cep
         const cepLimpo = funcionario.cep.replace(/\D/g, "");
 
-        console.log("Buscando endereço...", cepLimpo);
-
+        // tamanho correto
         if(cepLimpo.length !== 8) return;
 
+        // dispara loading no tempo da requisição
         setLoading(true);
 
         try{
+            // busca na api o cep digitado
             const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+            // await impede a aplicação de travar
             const data = await response.json();
 
+            // gerencia erro
             if(data.erro) {
                 setErros(prev => ({...prev, cep: "CEP não encontrado."}));
                 return false;
             } else {
+                // aloca os dados da api nos campos do formulário
                 setFuncionario({
                     ...funcionario,
                     rua: data.logradouro,
@@ -161,6 +179,7 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
             }
         }
         catch (e) {
+            // erro inesperado
             console.error("Erro na requisição: ", e);
         }
         finally {
@@ -168,17 +187,18 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
         }
     };
 
+    // função para botão enviar os dados
     const clickButton = async (e) => {
-
-        console.log("botão clicado");
 
         e.preventDefault();
 
+        // última camada de validação
         const cpfValidado = await validarCPF();
         const emailValidado = await validaEmail();
         const nomeValidado = await validaNome();
 
         if (cpfValidado && emailValidado && nomeValidado) {
+            // salva dados no objeto funcionario
             onSave(funcionario);
             onClose();
         }
@@ -190,7 +210,6 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
     return (
         <div className="formulario-overlay">
             <div className="formulario-adicao-content">
-                {/* Cabeçalho do Modal */}
                 <div className="modal-header">
                     <h2>{funcionarioParaEditar ? "Editar Funcionário" : "Cadastrar Funcionário"}</h2>
                     <button type="button" className="close-button" onClick={onClose}>×</button>
@@ -198,21 +217,17 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
                 
                 <p className="modal-subtitle">Preencha os dados abaixo.</p> 
 
-                {/* --- ADICIONE ESTE BLOCO DE LOADING AQUI --- */}
                 {loading && (
                     <div className="loading-overlay">
                         <div className="spinner"></div>
                         <p>Buscando CEP...</p>
                     </div>
                 )}
-                {/* ------------------------------------------- */}
 
-                {/* O Formulário de verdade continua aqui... */}
                 <form onSubmit={clickButton}>
                     <section>
                         <h3>Dados Pessoais</h3>
                         <div className="input-group">
-                            {/* Célula 1: CPF e seu Erro */}
                             <div className="input-wrapper">
                                 <input 
                                     name="cpf" 
@@ -227,7 +242,6 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
                                 {erros.cpf && <span className="error-message">{erros.cpf}</span>}
                             </div>
                             
-                            {/* Célula 2: Nome e seu Erro */}
                             <div className="input-wrapper">
                                 <input 
                                     name="nome"

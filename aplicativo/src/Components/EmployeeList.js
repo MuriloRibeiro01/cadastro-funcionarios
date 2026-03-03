@@ -3,11 +3,9 @@ import { Button } from './Button';
 
 export default function EmployeeList({ funcionarios, onDelete, onEdit }) {
 
-
-
     if (funcionarios.length === 0) {
         return (
-            <h3>Nenhum funcionário cadastrado ainda. Clique no botão abaixo para começar!</h3>
+            <h3 className='msg-nenhum-funcionario'>Nenhum funcionário cadastrado ainda. Clique no botão abaixo para começar!</h3>
         );
     }
 
@@ -33,15 +31,18 @@ export default function EmployeeList({ funcionarios, onDelete, onEdit }) {
 
 export function EmployeeCard({ id, nome, cargo, email, telefone, localidade, uf, onDelete, onEdit }) {
 
+    // evita que a página quebre por funcionários sem nome
     const nomeSeguro = nome || "Sem Nome";
 
+    // pega iniciais e aloca no ícone do card
     const iniciais = nomeSeguro.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
 
-    const deletarFuncionario = (e) => {
-        e.preventDefault();
+    // aloca o id ao detele
+    const deletarFuncionario = () => {
         onDelete(id);
     }
 
+    // aloca o id ao edit
     const editarFuncionario = () => {
         onEdit(id);
     }

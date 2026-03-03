@@ -1,9 +1,9 @@
 :root {
-  --nordic-navy: #2E3440;    /* Azul escuro profundo */
-  --nordic-snow: #F8F9FA;    /* Fundo limpo */
-  --nordic-frost: #88C0D0;   /* Destaque suave */
-  --text-main: #3B4252;      /* Texto confortável */
-  --card-bg: #FFFFFF;        /* Branco puro para os cards */
+  --nordic-navy: #2E3440;
+  --nordic-snow: #F8F9FA;
+  --nordic-frost: #88C0D0;
+  --text-main: #3B4252;
+  --card-bg: #FFFFFF;
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
@@ -89,15 +89,13 @@ main {
     flex-direction: column;
     align-items: center; 
     text-align: center;
-    position: relative; /* O Pulo do Gato: âncora para os botões! */
+    position: relative;
 }
 
 .card-funcionario:hover {
-  transform: translateY(-5px); /* Efeito clássico de elevação */
+  transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
-
-/* Adicione ou atualize estas classes no seu arquivo CSS */
 
 .card-funcionario h3 {
   margin: 0;
@@ -108,7 +106,7 @@ main {
 
 .tag-cargo {
   display: inline-block;
-  background-color: #E5E9F0; /* Cinza nórdico claro */
+  background-color: #E5E9F0;
   color: #4C566A;
   padding: 4px 12px;
   border-radius: 20px;
@@ -127,7 +125,7 @@ main {
 .info-contato p {
   margin: 4px 0;
   font-size: 0.9rem;
-  color: #4C566A; /* Cor mais suave para dados secundários */
+  color: #4C566A;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -162,25 +160,21 @@ main {
   right: 50%;
   transform: translateX(50%);
   
-  /* Dimensões exatas para um círculo perfeito */
   width: 65px;
   height: 65px;
   border-radius: 50%;
   
-  /* Paleta Nordic Noir */
   background-color: var(--nordic-navy);
   color: #FFFFFF;
   border: none;
   
-  /* O Pulo do Gato: Centralização Total */
   display: flex;
   align-items: center;
   justify-content: center;
   
-  /* Tipografia do ícone */
   font-size: 32px;
-  line-height: 0; /* Evita que o texto "empurre" o alinhamento */
-  padding-bottom: 4px; /* Ajuste fino manual se o '+' parecer baixo */
+  line-height: 0;
+  padding-bottom: 4px; 
   
   cursor: pointer;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
@@ -190,14 +184,13 @@ main {
 
 .btn-adicionar-fixo:hover {
   background-color: #434C5E;
-  transform: translateX(50%) scale(1.1); /* Mantém o centro e aumenta */
+  transform: translateX(50%) scale(1.1);
 }
 
-/* O Fundo Escurecido com Blur (Estilo Apple/Nórdico) */
 .formulario-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(46, 52, 64, 0.6); /* Cor base Nordic Navy escurecida */
+    background: rgba(46, 52, 64, 0.6);
     backdrop-filter: blur(4px);
     z-index: 999;
     display: flex;
@@ -208,19 +201,17 @@ main {
     animation: fadeIn 0.3s ease-out;
 }
 
-/* A Caixa Branca do Formulário */
 .formulario-adicao-content {
     background: var(--card-bg);
     width: 100%;
-    max-width: 500px; /* Um pouco mais largo para acomodar grid */
+    max-width: 500px;
     border-radius: 16px;
     padding: 30px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    max-height: 90vh; /* Se a tela for pequena, cria scroll interno */
+    max-height: 90vh;
     overflow-y: auto;
 }
 
-/* Cabeçalho da Caixa */
 .modal-header {
     display: flex;
     justify-content: space-between;
@@ -240,7 +231,6 @@ main {
     color: #818BA0;
 }
 
-/* O Botão de Fechar discreto */
 .close-button {
     background: transparent;
     border: none;
@@ -251,10 +241,9 @@ main {
 }
 
 .close-button:hover {
-    color: #BF616A; /* Vermelho suave nórdico */
+    color: #BF616A;
 }
 
-/* Títulos das Seções */
 .formulario-adicao-content section h3 {
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -265,14 +254,12 @@ main {
     padding-bottom: 5px;
 }
 
-/* Agrupando inputs lado a lado (Grid) */
 .input-group {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
 }
 
-/* Os Inputs */
 .input-form {
     width: 100%;
     padding: 12px 16px;
@@ -293,22 +280,20 @@ main {
     box-shadow: 0 0 0 3px rgba(136, 192, 208, 0.2);
 }
 
-/* O Grid específico do CEP */
 .cep-input {
     width: 50%;
 }
 
 .cep-data {
     display: grid;
-    grid-template-columns: 2fr 1fr; /* Rua é maior, Bairro é menor */
+    grid-template-columns: 2fr 1fr;
     gap: 12px;
 }
 
-/* Botão Salvar (Reaproveitando o componente Button com classe extra) */
 .form-actions {
     margin-top: 30px;
     display: flex;
-    justify-content: flex-end; /* Joga o botão pra direita */
+    justify-content: flex-end;
 }
 
 .btn-salvar {
@@ -342,50 +327,45 @@ main {
     }
 }
 
-/* Contêiner dos botões no topo direito do card */
 .acoes-card {
     position: absolute;
-    top: 16px; /* Desci um pouquinho para respirar melhor com o tamanho novo */
+    top: 16px;
     right: 16px;
     display: flex;
-    flex-direction: column; /* O Pulo do Gato: Empilha os elementos verticalmente! */
-    gap: 12px; /* Espaço um pouco maior entre o lápis e a lixeira */
+    flex-direction: column;
+    gap: 12px;
 }
 
-/* Estilo base "invisível" e elegante para os botões */
 .btn-icon {
     background-color: transparent;
     border: none;
     border-radius: 50%;
-    width: 48px;  /* Aumentado de 36px para 48px! */
-    height: 48px; /* Aumentado de 36px para 48px! */
+    width: 48px;  
+    height: 48px; 
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.6rem; /* Ícones bem mais visíveis agora! */
+    font-size: 1.6rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    color: #818BA0; /* Cinza nórdico suave */
+    color: #818BA0;
 }
 
-/* Efeito Hover do Lápis (Editar) */
 .btn-editar:hover {
     background-color: #ECEFF4;
     color: var(--nordic-navy);
     transform: scale(1.1);
 }
 
-/* Efeito Hover da Lixeira (Excluir) */
 .btn-excluir:hover {
-    background-color: #FFEAE6; /* Fundo vermelho bem clarinho */
-    color: #BF616A; /* Vermelho nórdico elegante */
+    background-color: #FFEAE6;
+    color: #BF616A;
     transform: scale(1.1);
 }
 
-/* Toast de Sucesso Moderno */
-.toast-nordico {
+.toast {
   position: fixed;
-  bottom: 120px; /* Fica acima do botão de + */
+  bottom: 120px;
   left: 50%;
   transform: translateX(-50%);
   background-color: #A3BE8C; 
@@ -409,13 +389,12 @@ main {
   to { opacity: 0; }
 }
 
-/* --- Overlay de Loading --- */
 .loading-overlay {
     position: absolute;
     inset: 0;
     background: rgba(255, 255, 255, 0.85); 
     backdrop-filter: blur(2px);
-    z-index: 10; /* Fica acima dos inputs, mas dentro do modal */
+    z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -428,8 +407,8 @@ main {
 .spinner {
     width: 45px;
     height: 45px;
-    border: 4px solid #E5E9F0; /* Cinza claro */
-    border-top: 4px solid var(--nordic-frost); /* Azul do destaque */
+    border: 4px solid #E5E9F0;
+    border-top: 4px solid var(--nordic-frost); 
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
     margin-bottom: 12px;
@@ -440,11 +419,10 @@ main {
     100% { transform: rotate(360deg); }
 }
 
-/* --- Modal de Confirmação --- */
 .modal-confirmacao {
     background: var(--card-bg);
     width: 100%;
-    max-width: 400px; /* Mais estreito que o formulário normal */
+    max-width: 400px;
     border-radius: 16px;
     padding: 30px;
     text-align: center;
@@ -453,7 +431,7 @@ main {
 }
 
 .titulo-perigo {
-    color: #BF616A; /* Vermelho Nórdico */
+    color: #BF616A;
     margin-top: 0;
     font-size: 1.4rem;
 }
@@ -471,7 +449,6 @@ main {
     gap: 16px;
 }
 
-/* Botão Neutro (Cancelar) */
 .btn-cancelar {
     background-color: #E5E9F0;
     color: #4C566A;
@@ -489,9 +466,8 @@ main {
     background-color: #D8DEE9;
 }
 
-/* Botão Destrutivo (Excluir) */
 .btn-excluir-confirm {
-    background-color: #BF616A; /* Vermelho Nórdico */
+    background-color: #BF616A;
     color: white;
     border: none;
     padding: 12px 20px;

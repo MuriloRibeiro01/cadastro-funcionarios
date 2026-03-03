@@ -1,7 +1,6 @@
 import './App.css';
 import { Button } from './Components/Button'
 import { FormFuncionario } from './Components/FormFuncionario';
-import UserAction from './Components/UserAction';
 import {  useEffect, useState } from "react";
 import EmployeeList from './Components/EmployeeList';
 
@@ -21,13 +20,15 @@ function App() {
     setIdParaExcluir(idDoBotao);
   };
 
+  // mensagem de erro de 3 segundos
   const mostrarToast = (mensagem) => {
     setToastMensagem(mensagem);
     setTimeout(() => {
       setToastMensagem(null);
-    }, 3000); // 3 segundos
+    }, 3000);
   };
 
+  // função com dados do formulário para novo funcionário
   const salvarNovoFuncionario = (dadosFormulario) => {    
     console.log("Dados recebidos: ", dadosFormulario);
 
@@ -35,6 +36,7 @@ function App() {
 
     if(dadosFormulario.id) {
       novaLista = listaFuncionario.map((func) => {
+        // se o id for o mesmo, é uma edição
         if (func.id === dadosFormulario.id) {
           return dadosFormulario;
         }
@@ -42,38 +44,44 @@ function App() {
       });
       mostrarToast("Funcionário atualizado com sucesso!");
     } else {
+      // senão, cria um funcionário novo
       const funcionarioComId = {...dadosFormulario, id: Date.now() };
       novaLista = [...listaFuncionario, funcionarioComId];
       mostrarToast("Funcionário cadastrado com sucesso!");
     }
-
+    // atualiza a lista independente do resultado
     setListaFuncionario(novaLista);
     localStorage.setItem("funcionarios_db", JSON.stringify(novaLista));
     setFuncionarioEmEdicao(null);
   };
 
+  // função para exclusão
   const confirmarEDeletar = () => {
+    // decide se o id é o mesmo do funcionário clicado no loop
     const listaAtualizada = listaFuncionario.filter((func) => {
+      // se for, ele "apaga" aquele id, gerando uma lista sem esse funcionário
       return func.id !== idParaExcluir;
     });
 
     setListaFuncionario(listaAtualizada);
     localStorage.setItem("funcionarios_db", JSON.stringify(listaAtualizada));
     
-    setIdParaExcluir(null); // Fecha o modal
-    mostrarToast("Funcionário excluído com sucesso!"); // Usa o toast que acabamos de criar
+    setIdParaExcluir(null);
+    mostrarToast("Funcionário excluído com sucesso!");
   };
 
   const editarFuncionarioExistente = (idEditBotao) => {
-    const funcionarioSeleciona = listaFuncionario.find((func) =>{
+    // verifica se o id é o mesmo do funcionário clicado
+    const funcionarioSelecionado = listaFuncionario.find((func) =>{
       return func.id === idEditBotao;
     });
 
-    setFuncionarioEmEdicao(funcionarioSeleciona);
-
+    // guarda ele em estado temporário e abre o formulário novamente
+    setFuncionarioEmEdicao(funcionarioSelecionado);
     setModalIsOpen(true);
   }
 
+  // verifica no localStorage os dados e retorna num objeto
   useEffect(() => {
     const dadosSalvos = localStorage.getItem("funcionarios_db");
     if (dadosSalvos) {
@@ -109,7 +117,7 @@ function App() {
         </div>
         
       {toastMensagem && (
-          <div className="toast-nordico">
+          <div className="toast">
             {toastMensagem}
           </div>
         )}
