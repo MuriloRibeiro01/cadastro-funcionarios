@@ -14,14 +14,22 @@ function App() {
   const salvarNovoFuncionario = (novoFuncionario) => {    
     console.log("Dados recebidos: ", novoFuncionario);
 
-    const novaLista = [...listaFuncionario, novoFuncionario];
+    const funcionarioComId = {...novoFuncionario, id: Date.now() };
+    const novaLista = [...listaFuncionario, funcionarioComId];
 
     setListaFuncionario(novaLista);
 
-    localStorage.setItem("funcionários cadastrados", JSON.stringify(novaLista));
+    localStorage.setItem("funcionarios_db", JSON.stringify(novaLista));
 
     alert("Funcionário cadastrado com sucesso!");
   };
+
+  useEffect(() => {
+    const dadosSalvos = localStorage.getItem("funcionarios_db");
+    if (dadosSalvos) {
+      setListaFuncionario(JSON.parse(dadosSalvos));
+    }
+  }, []);
 
   return (    
     <div className="App">
@@ -31,7 +39,7 @@ function App() {
 
       <main>
         <div>
-          <EmployeeList />
+          <EmployeeList funcionarios={listaFuncionario} />
           <Button
             texto="Adicionar Funcionario"
             onClick={() => setModalIsOpen(true)}

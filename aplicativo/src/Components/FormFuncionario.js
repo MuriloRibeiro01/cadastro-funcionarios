@@ -150,6 +150,7 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, adicionarFu
             onSave(funcionario);
             onClose();
         }
+        return true;
     }
 
     if (!isOpen) return null;
