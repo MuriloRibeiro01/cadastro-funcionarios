@@ -1,5 +1,5 @@
-export function Button({ onClick, texto }) {
+export function Button({ onClick, texto, className }) {
     return (
-        <button onClick={onClick}>{texto}</button>
+        <button className={className} onClick={onClick}>{texto}</button>
     );
 }

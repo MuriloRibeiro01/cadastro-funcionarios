@@ -44,20 +44,24 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
     const validarCPF = async () => {
         const cpfLimpo = funcionario.cpf.replace(/[^\d]+/g, '');
 
+        const dispararErroCpf = () => {
+            setErros(prev => ({ ...prev, cpf: "CPF Inválido." }));
+            return false;
+        };
+
         if(cpfLimpo.length !== 11 ||
-            funcionario.cpf === "00000000000" || 
-            funcionario.cpf === "11111111111" || 
-            funcionario.cpf === "22222222222" || 
-            funcionario.cpf === "33333333333" || 
-            funcionario.cpf === "44444444444" || 
-            funcionario.cpf === "55555555555" || 
-            funcionario.cpf === "66666666666" || 
-            funcionario.cpf === "77777777777" || 
-            funcionario.cpf === "88888888888" || 
-            funcionario.cpf === "99999999999"
-        ) {
-            alert("CPF inválido.");    
-            return false;                
+            cpfLimpo === "00000000000" || 
+            cpfLimpo === "11111111111" || 
+            cpfLimpo === "22222222222" || 
+            cpfLimpo === "33333333333" || 
+            cpfLimpo === "44444444444" || 
+            cpfLimpo === "55555555555" || 
+            cpfLimpo === "66666666666" || 
+            cpfLimpo === "77777777777" || 
+            cpfLimpo === "88888888888" || 
+            cpfLimpo === "99999999999"
+        ) { 
+            return dispararErroCpf();                
         }
 
         let soma = 0;
@@ -65,20 +69,27 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
 
         // calcula o primeiro dígito verificador
         for (let i = 1; i <= 9; i++ ) {
-            soma += parseInt(funcionario.cpf.substring(i - 1)) * (11 - i);
+            // CORREÇÃO: Adicionado o ", i" no substring
+            soma += parseInt(cpfLimpo.substring(i - 1, i)) * (11 - i);
         }
         resto = (soma * 10) % 11;
         if((resto === 10) || (resto === 11)) resto = 0;
-        if (resto !== parseInt(funcionario.cpf.substring(9, 10))) return false;
+        if (resto !== parseInt(cpfLimpo.substring(9, 10))) return dispararErroCpf();
 
         // Calcula o segundo dígito verificador
         soma = 0;
         for (let i = 1; i <= 10; i++) {
-            soma = soma + parseInt(funcionario.cpf.substring(i - 1, i)) * (12 - i);
+            soma = soma + parseInt(cpfLimpo.substring(i - 1, i)) * (12 - i);
         }
         resto = (soma * 10) % 11;
         if ((resto === 10) || (resto === 11)) resto = 0;
-        if (resto !== parseInt(funcionario.cpf.substring(10, 11))) return false;
+        if (resto !== parseInt(cpfLimpo.substring(10, 11))) return dispararErroCpf();
+
+        setErros(prev => {
+            const novoErro = {...prev};
+            delete novoErro.cpf;
+            return novoErro;
+        });
 
         return true;
     }
@@ -137,7 +148,8 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
             const data = await response.json();
 
             if(data.erro) {
-                alert("CEP não encontrado.");
+                setErros(prev => ({...prev, cep: "CEP não encontrado."}));
+                return false;
             } else {
                 setFuncionario({
                     ...funcionario,
@@ -176,59 +188,107 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, funcionario
     if (!isOpen) return null;
 
     return (
-        <div className="formulario-funcionario">
-            <div className="modal-content">
-                <button className="close-button" onClick={onClose}>X</button>
-                <h1>Cadastrar Funcionário</h1>
-            </div>
-            <form className="formulario-adicao-content" onSubmit={clickButton}>
-                <p>Adicione os dados do funcionário.</p> 
-                <section>
-                    <h3>Dados Pessoais</h3>
-                    <input value={funcionario.cpf} onChange={handleChange} onBlur={validarCPF} name="cpf" className="input-form" placeholder="CPF" type="text" required></input>
-                    <input value={funcionario.nome} onChange={handleChange} onBlur={validaNome} name="nome" className="input-form" placeholder="Nome" type="text" required
-                    />
-                    {erros.nome &&( 
-                        <span className="error-message">
-                            {erros.nome}
-                        </span>
-                    )}
-                </section>
-                <section>
-                    <h3>Contato</h3>
-                    <input 
-                        name="email" 
-                        value={funcionario.email} 
-                        onChange={handleChange} 
-                        onBlur={validaEmail} 
-                        className={`input-form ${erros.email ? 'input-erro' : ''}`} 
-                        placeholder="E-Mail" 
-                        type="text"
-                        required 
-                    /> {/* Fechamento aqui! */}
-                    {erros.email && <span className="error-message">{erros.email}</span>}
-                    <input value={funcionario.telefone} onChange={handleChange} name="telefone" className="input-form" placeholder="Telefone" type="text"></input>
-                </section>
-                <section>
-                    <h3>Áreac Ocupante</h3>
-                    <input value={funcionario.cargo} onChange={handleChange} name="cargo" className="input-form" placeholder="Cargo" type="text" required></input>
-                </section>
-                <section>
-                    <h3>Endereço</h3>
-                    <input value={funcionario.cep} onChange={handleChange} onBlur={handleCepBlur} name="cep" className="input-form" placeholder="CEP" type="text"></input>
-                    <div className="cep-data">
-                        <input value={funcionario.rua} onChange={handleChange} name="rua" className="input-form" placeholder="Rua"></input>
-                        <input value={funcionario.bairro} onChange={handleChange} name="bairro" className="input-form" placeholder="Bairro"></input>
-                        <input value={funcionario.localidade} onChange={handleChange} name="localidade" className="input-form" placeholder="Cidade"></input>
-                        <input value={funcionario.uf} onChange={handleChange} name="uf" className="input-form" placeholder="UF"></input>
-                    </div>
-                </section>     
-                
-                <div className="form-actions">
-                    <Button texto="Salvar Conteúdo" />
+        <div className="formulario-overlay">
+            <div className="formulario-adicao-content">
+                {/* Cabeçalho do Modal */}
+                <div className="modal-header">
+                    <h2>{funcionarioParaEditar ? "Editar Funcionário" : "Cadastrar Funcionário"}</h2>
+                    <button type="button" className="close-button" onClick={onClose}>×</button>
                 </div>
-            </form>
+                
+                <p className="modal-subtitle">Preencha os dados abaixo.</p> 
 
+                {/* --- ADICIONE ESTE BLOCO DE LOADING AQUI --- */}
+                {loading && (
+                    <div className="loading-overlay">
+                        <div className="spinner"></div>
+                        <p>Buscando CEP...</p>
+                    </div>
+                )}
+                {/* ------------------------------------------- */}
+
+                {/* O Formulário de verdade continua aqui... */}
+                <form onSubmit={clickButton}>
+                    <section>
+                        <h3>Dados Pessoais</h3>
+                        <div className="input-group">
+                            {/* Célula 1: CPF e seu Erro */}
+                            <div className="input-wrapper">
+                                <input 
+                                    name="cpf" 
+                                    value={funcionario.cpf} 
+                                    onChange={handleChange} 
+                                    onBlur={validarCPF} 
+                                    className={`input-form ${erros.cpf ? 'input-erro' : ''}`} 
+                                    placeholder="CPF" 
+                                    type="text" 
+                                    required 
+                                />
+                                {erros.cpf && <span className="error-message">{erros.cpf}</span>}
+                            </div>
+                            
+                            {/* Célula 2: Nome e seu Erro */}
+                            <div className="input-wrapper">
+                                <input 
+                                    name="nome"
+                                    value={funcionario.nome} 
+                                    onChange={handleChange} 
+                                    onBlur={validaNome} 
+                                    className={`input-form ${erros.nome ? 'input-erro' : ''}`} 
+                                    placeholder="Nome Completo" 
+                                    type="text" 
+                                    required 
+                                />
+                                {erros.nome && <span className="error-message">{erros.nome}</span>}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3>Contato</h3>
+                        <div className="input-group">
+                            <input
+                                value={funcionario.email} 
+                                onChange={handleChange} 
+                                onBlur={validaEmail} 
+                                name="email" 
+                                className={`input-form ${erros.email ? 'input-erro' : ''}`} placeholder="E-Mail" type="email" required 
+                            />
+                            <input value={funcionario.telefone} onChange={handleChange} name="telefone" className="input-form" placeholder="Telefone" type="text" />
+                        </div>
+                        {erros.email && <span className="error-message">{erros.email}</span>}
+                    </section>
+
+                    <section>
+                        <h3>Atuação</h3>
+                        <input value={funcionario.cargo} onChange={handleChange} name="cargo" className="input-form" placeholder="Cargo Ocupado" type="text" required />
+                    </section>
+
+                    <section>
+                        <h3>Endereço</h3>
+                        <input
+                            value={funcionario.cep} 
+                            onChange={handleChange} 
+                            onBlur={handleCepBlur} 
+                            name="cep" 
+                            className="input-form cep-input" 
+                            placeholder="CEP" 
+                            type="text" 
+                        />
+                        {erros.cep && <span className="error-message">{erros.cep}</span>}
+                        <div className="cep-data">
+                            <input value={funcionario.rua} onChange={handleChange} name="rua" className="input-form" placeholder="Rua" readOnly />
+                            <input value={funcionario.bairro} onChange={handleChange} name="bairro" className="input-form" placeholder="Bairro" readOnly />
+                            <input value={funcionario.localidade} onChange={handleChange} name="localidade" className="input-form" placeholder="Cidade" readOnly />
+                            <input value={funcionario.uf} onChange={handleChange} name="uf" className="input-form uf-input" placeholder="UF" readOnly />
+                        </div>
+                    </section>     
+                    
+                    <div className="form-actions">
+                        <Button className="btn-salvar" texto="Salvar" />
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

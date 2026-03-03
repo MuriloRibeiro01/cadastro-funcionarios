@@ -7,7 +7,7 @@ export default function EmployeeList({ funcionarios, onDelete, onEdit }) {
 
     if (funcionarios.length === 0) {
         return (
-            <p>Nenhum funcionário cadastrado ainda. Clique no botão acima para começar!</p>
+            <h3>Nenhum funcionário cadastrado ainda. Clique no botão abaixo para começar!</h3>
         );
     }
 
@@ -49,9 +49,18 @@ export function EmployeeCard({ id, nome, cargo, email, telefone, localidade, uf,
 
     return (
         <div className='card-funcionario'>
-            <div className='header-card-funcionario'>
-                <Button texto="X" onClick={deletarFuncionario} />
-                <Button texto="editar" onClick={editarFuncionario} />
+            <div className="acoes-card">
+                <Button 
+                    className="btn-icon btn-editar" 
+                    texto="✏" 
+                    onClick={editarFuncionario} 
+                />
+                
+                <Button 
+                    className="btn-icon btn-excluir" 
+                    texto="🗑" 
+                    onClick={deletarFuncionario} 
+                />
             </div>
             <div className='avatar-circulo'>
                 {iniciais}

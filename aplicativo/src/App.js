@@ -13,10 +13,24 @@ function App() {
 
   const [funcionarioEmEdicao, setFuncionarioEmEdicao] = useState(null);
 
+  const [toastMensagem, setToastMensagem] = useState(null);
+
+  const [idParaExcluir, setIdParaExcluir] = useState(null);
+
+  const solicitarExclusao = (idDoBotao) => {
+    setIdParaExcluir(idDoBotao);
+  };
+
+  const mostrarToast = (mensagem) => {
+    setToastMensagem(mensagem);
+    setTimeout(() => {
+      setToastMensagem(null);
+    }, 3000); // 3 segundos
+  };
+
   const salvarNovoFuncionario = (dadosFormulario) => {    
     console.log("Dados recebidos: ", dadosFormulario);
 
-    const funcionarioComId = {...dadosFormulario, id: Date.now() };
     let novaLista;
 
     if(dadosFormulario.id) {
@@ -26,11 +40,11 @@ function App() {
         }
         return func;
       });
-      alert("Funcionário atualizado com sucesso!");
+      mostrarToast("Funcionário atualizado com sucesso!");
     } else {
       const funcionarioComId = {...dadosFormulario, id: Date.now() };
       novaLista = [...listaFuncionario, funcionarioComId];
-      alert("Funcionário cadastrado com sucesso!");
+      mostrarToast("Funcionário cadastrado com sucesso!");
     }
 
     setListaFuncionario(novaLista);
@@ -38,15 +52,17 @@ function App() {
     setFuncionarioEmEdicao(null);
   };
 
-  const deletarFuncionarioExistente = (idDoBotao) => {
+  const confirmarEDeletar = () => {
     const listaAtualizada = listaFuncionario.filter((func) => {
-      return func.id !== idDoBotao;
+      return func.id !== idParaExcluir;
     });
 
     setListaFuncionario(listaAtualizada);
-
     localStorage.setItem("funcionarios_db", JSON.stringify(listaAtualizada));
-  }
+    
+    setIdParaExcluir(null); // Fecha o modal
+    mostrarToast("Funcionário excluído com sucesso!"); // Usa o toast que acabamos de criar
+  };
 
   const editarFuncionarioExistente = (idEditBotao) => {
     const funcionarioSeleciona = listaFuncionario.find((func) =>{
@@ -73,17 +89,16 @@ function App() {
 
       <main>
         <div>
-          <EmployeeList onEdit={editarFuncionarioExistente} onDelete={deletarFuncionarioExistente} funcionarios={listaFuncionario}  />
-          
-          <div className='btn-adicionar-fixo'>
+          <EmployeeList onEdit={editarFuncionarioExistente} onDelete={solicitarExclusao} funcionarios={listaFuncionario}  />
+
             <Button
+            className="btn-adicionar-fixo"
               texto="+"
               onClick={() => {
                 setFuncionarioEmEdicao(null);
                 setModalIsOpen(true);
               }}
             />
-          </div>
           
           <FormFuncionario 
           funcionarioParaEditar={funcionarioEmEdicao}
@@ -92,6 +107,34 @@ function App() {
             onClose={() => setModalIsOpen(false)}
           />
         </div>
+        
+      {toastMensagem && (
+          <div className="toast-nordico">
+            {toastMensagem}
+          </div>
+        )}
+
+        {idParaExcluir && (
+          <div className="formulario-overlay">
+            <div className="modal-confirmacao">
+              <h2 className="titulo-perigo">⚠️ Confirmar Exclusão</h2>
+              <p>Tem certeza que deseja demitir este funcionário? Essa ação não pode ser desfeita.</p>
+              
+              <div className="form-actions-confirm">
+                <Button 
+                  className="btn-cancelar" 
+                  texto="Cancelar" 
+                  onClick={() => setIdParaExcluir(null)} 
+                />
+                <Button 
+                  className="btn-excluir-confirm" 
+                  texto="Sim, Excluir" 
+                  onClick={confirmarEDeletar} 
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </main>
 
       <footer className='App-footer'>
