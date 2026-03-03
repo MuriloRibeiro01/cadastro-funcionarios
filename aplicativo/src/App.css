@@ -1,3 +1,20 @@
+:root {
+  --nordic-navy: #2E3440;    /* Azul escuro profundo */
+  --nordic-snow: #F8F9FA;    /* Fundo limpo */
+  --nordic-frost: #88C0D0;   /* Destaque suave */
+  --text-main: #3B4252;      /* Texto confortável */
+  --card-bg: #FFFFFF;        /* Branco puro para os cards */
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+main {
+  background-color: var(--nordic-snow);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
 .App {
   text-align: center;
 }
@@ -47,4 +64,267 @@
 .input-form {
   border: none;
   padding: 5px;
+}
+
+.campo-listagem-funcionarios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  padding: 40px 10%;
+  padding-bottom: 120px;
+}
+
+.card-funcionario {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza o conteúdo dentro do card */
+  text-align: center;
+}
+
+.card-funcionario:hover {
+  transform: translateY(-5px); /* Efeito clássico de elevação */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Adicione ou atualize estas classes no seu arquivo CSS */
+
+.card-funcionario h3 {
+  margin: 0;
+  color: var(--nordic-navy);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.tag-cargo {
+  display: inline-block;
+  background-color: #E5E9F0; /* Cinza nórdico claro */
+  color: #4C566A;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.divisor {
+  width: 80%;
+  height: 1px;
+  background-color: #ECEFF4;
+  margin: 20px 0;
+}
+
+.info-contato p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #4C566A; /* Cor mais suave para dados secundários */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-local {
+  margin-top: 15px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #818BA0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.avatar-circulo {
+  width: 60px;
+  height: 60px;
+  background-color: var(--nordic-navy);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+
+.btn-adicionar-fixo {
+  position: fixed;
+  bottom: 40px;
+  right: 50%;
+  transform: translateX(50%);
+  
+  /* Dimensões exatas para um círculo perfeito */
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  
+  /* Paleta Nordic Noir */
+  background-color: var(--nordic-navy);
+  color: #FFFFFF;
+  border: none;
+  
+  /* O Pulo do Gato: Centralização Total */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Tipografia do ícone */
+  font-size: 32px;
+  line-height: 0; /* Evita que o texto "empurre" o alinhamento */
+  padding-bottom: 4px; /* Ajuste fino manual se o '+' parecer baixo */
+  
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-adicionar-fixo:hover {
+  background-color: #434C5E;
+  transform: translateX(50%) scale(1.1); /* Mantém o centro e aumenta */
+}
+
+/* Overlay escuro */
+.formulario-funcionario {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 999;
+
+    display: flex;
+    justify-content: center;
+
+    overflow-y: auto; /* permite scroll no overlay */
+    padding: 20px 12px;
+}
+
+/* Caixa do modal */
+.formulario-adicao-content {
+    position: relative;
+    background: #ffffff;
+    width: 100%;
+    max-width: 420px;
+
+    border-radius: 16px;
+    padding: 24px 20px 30px 20px;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+
+    margin: auto 0; /* centraliza horizontalmente */
+}
+
+/* Header do modal */
+.modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.modal-content h1 {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Botão fechar */
+.close-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: #f5f5f5;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.close-button:hover {
+    background: #e53935;
+    color: #fff;
+}
+
+/* Texto auxiliar */
+.formulario-adicao-content p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Seções */
+.formulario-adicao-content section {
+    margin-bottom: 24px;
+}
+
+.formulario-adicao-content h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+/* Inputs */
+.input-form {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+}
+
+.input-form:focus {
+    outline: none;
+    border-color: #4f46e5;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+/* Erro */
+.input-erro {
+    border-color: #e53935;
+    background-color: #fff5f5;
+}
+
+.error-message {
+    color: #e53935;
+    font-size: 12px;
+    margin-top: -6px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Grid endereço (mobile organizado) */
+.cep-data {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Botão área */
+.form-actions {
+    margin-top: 10px;
+}
+
+/* Animação */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

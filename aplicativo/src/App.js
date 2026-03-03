@@ -11,18 +11,52 @@ function App() {
 
   const [listaFuncionario, setListaFuncionario] = useState([]);
 
-  const salvarNovoFuncionario = (novoFuncionario) => {    
-    console.log("Dados recebidos: ", novoFuncionario);
+  const [funcionarioEmEdicao, setFuncionarioEmEdicao] = useState(null);
 
-    const funcionarioComId = {...novoFuncionario, id: Date.now() };
-    const novaLista = [...listaFuncionario, funcionarioComId];
+  const salvarNovoFuncionario = (dadosFormulario) => {    
+    console.log("Dados recebidos: ", dadosFormulario);
+
+    const funcionarioComId = {...dadosFormulario, id: Date.now() };
+    let novaLista;
+
+    if(dadosFormulario.id) {
+      novaLista = listaFuncionario.map((func) => {
+        if (func.id === dadosFormulario.id) {
+          return dadosFormulario;
+        }
+        return func;
+      });
+      alert("Funcionário atualizado com sucesso!");
+    } else {
+      const funcionarioComId = {...dadosFormulario, id: Date.now() };
+      novaLista = [...listaFuncionario, funcionarioComId];
+      alert("Funcionário cadastrado com sucesso!");
+    }
 
     setListaFuncionario(novaLista);
-
     localStorage.setItem("funcionarios_db", JSON.stringify(novaLista));
-
-    alert("Funcionário cadastrado com sucesso!");
+    setFuncionarioEmEdicao(null);
   };
+
+  const deletarFuncionarioExistente = (idDoBotao) => {
+    const listaAtualizada = listaFuncionario.filter((func) => {
+      return func.id !== idDoBotao;
+    });
+
+    setListaFuncionario(listaAtualizada);
+
+    localStorage.setItem("funcionarios_db", JSON.stringify(listaAtualizada));
+  }
+
+  const editarFuncionarioExistente = (idEditBotao) => {
+    const funcionarioSeleciona = listaFuncionario.find((func) =>{
+      return func.id === idEditBotao;
+    });
+
+    setFuncionarioEmEdicao(funcionarioSeleciona);
+
+    setModalIsOpen(true);
+  }
 
   useEffect(() => {
     const dadosSalvos = localStorage.getItem("funcionarios_db");
@@ -39,12 +73,20 @@ function App() {
 
       <main>
         <div>
-          <EmployeeList funcionarios={listaFuncionario} />
-          <Button
-            texto="Adicionar Funcionario"
-            onClick={() => setModalIsOpen(true)}
-          />
+          <EmployeeList onEdit={editarFuncionarioExistente} onDelete={deletarFuncionarioExistente} funcionarios={listaFuncionario}  />
+          
+          <div className='btn-adicionar-fixo'>
+            <Button
+              texto="+"
+              onClick={() => {
+                setFuncionarioEmEdicao(null);
+                setModalIsOpen(true);
+              }}
+            />
+          </div>
+          
           <FormFuncionario 
+          funcionarioParaEditar={funcionarioEmEdicao}
             onSave={salvarNovoFuncionario}
             isOpen={isModalOpen}
             onClose={() => setModalIsOpen(false)}

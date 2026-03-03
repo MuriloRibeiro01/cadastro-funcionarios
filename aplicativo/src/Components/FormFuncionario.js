@@ -1,7 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./Button";
 
-export function FormFuncionario({ isOpen, onClose, onSave, children, adicionarFuncionario }) {    
+export function FormFuncionario({ isOpen, onClose, onSave, children, funcionarioParaEditar }) {    
+
+    useEffect(() => {
+        if (isOpen) {
+            if(funcionarioParaEditar) {
+                setFuncionario(funcionarioParaEditar);
+            } else {
+                setFuncionario({ cpf: "", nome: "", email: "", telefone: "", cargo: "", cep: "", rua: "", bairro: "", localidade: "", uf: "" });
+                setErros({});
+            }
+        }
+    }, [isOpen, funcionarioParaEditar]);
 
     // recupera dados e aloca aos objetos
     const [funcionario, setFuncionario] = useState({
@@ -57,8 +68,8 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, adicionarFu
             soma += parseInt(funcionario.cpf.substring(i - 1)) * (11 - i);
         }
         resto = (soma * 10) % 11;
-        if((resto == 10) || (resto == 11)) resto = 0;
-        if (resto != parseInt(funcionario.cpf.substring(9, 10))) return false;
+        if((resto === 10) || (resto === 11)) resto = 0;
+        if (resto !== parseInt(funcionario.cpf.substring(9, 10))) return false;
 
         // Calcula o segundo dígito verificador
         soma = 0;
@@ -73,14 +84,23 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, adicionarFu
     }
 
     const validaNome = async () => {
-        const nomeDigitado = funcionario.nome; 
+        const nomeDigitado = funcionario.nome.trim();
+        
+        const partes = nomeDigitado.split(" ").filter(parte => parte !== "");
 
-        let espacosEmBranco = nomeDigitado.split(" ");
-
-        if(espacosEmBranco.length < 2) {
-            alert("Nome não está completo");
+        if (partes.length < 2 || partes[1].length < 2) {
+            setErros(prev => ({
+                ...prev,
+                nome: "Informe nome e sobrenome"
+            }));
             return false;
         }
+
+        setErros(prev => ({
+            ...prev,
+            nome: ""
+        }));
+
         return true;
     }
 
@@ -161,12 +181,18 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, adicionarFu
                 <button className="close-button" onClick={onClose}>X</button>
                 <h1>Cadastrar Funcionário</h1>
             </div>
-            <form className="formulario-adicao-content">
+            <form className="formulario-adicao-content" onSubmit={clickButton}>
                 <p>Adicione os dados do funcionário.</p> 
                 <section>
                     <h3>Dados Pessoais</h3>
                     <input value={funcionario.cpf} onChange={handleChange} onBlur={validarCPF} name="cpf" className="input-form" placeholder="CPF" type="text" required></input>
-                    <input value={funcionario.nome} onChange={handleChange} onBlur={validaNome} name="nome" className="input-form" placeholder="Nome" type="text" required></input>
+                    <input value={funcionario.nome} onChange={handleChange} onBlur={validaNome} name="nome" className="input-form" placeholder="Nome" type="text" required
+                    />
+                    {erros.nome &&( 
+                        <span className="error-message">
+                            {erros.nome}
+                        </span>
+                    )}
                 </section>
                 <section>
                     <h3>Contato</h3>
@@ -198,7 +224,9 @@ export function FormFuncionario({ isOpen, onClose, onSave, children, adicionarFu
                     </div>
                 </section>     
                 
-                <Button onClick={clickButton} texto="Salvar Conteúdo" />
+                <div className="form-actions">
+                    <Button texto="Salvar Conteúdo" />
+                </div>
             </form>
 
         </div>
