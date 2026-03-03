@@ -1,5 +1,5 @@
-export function Button(props) {
+export function Button({ onClick, texto }) {
     return (
-        <button onClick={props.onClick}>{props.texto}</button>
+        <button onClick={onClick}>{texto}</button>
     );
 }

@@ -3,17 +3,25 @@ import { Button } from './Components/Button'
 import { FormFuncionario } from './Components/FormFuncionario';
 import UserAction from './Components/UserAction';
 import {  useEffect, useState } from "react";
+import EmployeeList from './Components/EmployeeList';
 
 function App() {
   const [isModalOpen, setModalIsOpen] = useState(false);
-  const [setData, data] = useState(null);
+  const [data, setData] = useState(null);
 
-  useEffect(() =>{
-    fetch('https://viacep.com.br/ws/')
-    .then(response => response.json())
-    .then(json => setData(json))
-    .catch(error => console.error(error));
-  }, []);
+  const [listaFuncionario, setListaFuncionario] = useState([]);
+
+  const salvarNovoFuncionario = (novoFuncionario) => {    
+    console.log("Dados recebidos: ", novoFuncionario);
+
+    const novaLista = [...listaFuncionario, novoFuncionario];
+
+    setListaFuncionario(novaLista);
+
+    localStorage.setItem("funcionários cadastrados", JSON.stringify(novaLista));
+
+    alert("Funcionário cadastrado com sucesso!");
+  };
 
   return (    
     <div className="App">
@@ -23,11 +31,13 @@ function App() {
 
       <main>
         <div>
+          <EmployeeList />
           <Button
             texto="Adicionar Funcionario"
             onClick={() => setModalIsOpen(true)}
           />
           <FormFuncionario 
+            onSave={salvarNovoFuncionario}
             isOpen={isModalOpen}
             onClose={() => setModalIsOpen(false)}
           />
