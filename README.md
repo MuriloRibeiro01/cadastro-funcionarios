@@ -9,10 +9,6 @@ Sistema completo para cadastro, edição e exclusão de funcionários com integr
 
 ![Status](https://img.shields.io/badge/Status-Concluído-brightgreen) ![License](https://img.shields.io/badge/License-MIT-green)
 
-## 🎥 Demonstração
-
-![Demo do EmploYEE](./assets/demo.mp4)
-
 ## ✨ Funcionalidades
 
 - ✅ **CRUD Completo** - Cadastre, edite, visualize e exclua funcionários
