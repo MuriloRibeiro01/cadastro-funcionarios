@@ -6,7 +6,6 @@ import EmployeeList from './Components/EmployeeList';
 
 function App() {
   const [isModalOpen, setModalIsOpen] = useState(false);
-  const [data, setData] = useState(null);
 
   const [listaFuncionario, setListaFuncionario] = useState([]);
 
